@@ -1,65 +1,12 @@
-Complaint Management System
-A Complaint Management System built with Spring Boot (Java) for backend, React for frontend, and MySQL as the database. It allows users to register complaints, track their status, and for staff/admins to allocate and resolve complaints efficiently.
+# React + Vite
 
-Features
-User registration and login
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Complaint registration with Google Maps location pinning
+Currently, two official plugins are available:
 
-Staff allocation and workload tracking
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-Status updates (Pending, In Progress, Resolved)
+## Expanding the ESLint configuration
 
-Role-based access (User, Staff, Admin)
-
-Email notifications (optional)
-
-Clean RESTful APIs for easy integration
-
-Tech Stack
-Backend: Java, Spring Boot, Spring Data JPA, Spring Security, JWT
-
-Frontend: React, Axios, TailwindCSS (or Material UI)
-
-Database: MySQL
-
-Map Integration: Google Maps API
-
-/backend
-    ├── src/main/java/com/complaintsystem
-    │       ├── controller
-    │       ├── dto
-    │       ├── entity
-    │       ├── repository
-    │       ├── service
-    │       ├── exception
-    │       └── security
-/frontend
-    ├── src
-    │   ├── components
-    │   ├── pages
-    │   ├── services
-    │   └── utils
-
-API Endpoints
-POST /api/auth/register - Register user
-
-POST /api/auth/login - Login user
-
-POST /api/complaints - Register complaint
-
-GET /api/complaints/{id} - Get complaint details
-
-PUT /api/complaints/{id}/status - Update complaint status
-
-GET /api/staff - Get staff workload for allocation
-
-Additional CRUD endpoints for admin as needed
-
-Database Schema
-User Table: stores user credentials, roles
-
-Complaint Table: stores complaint details with status, location coordinates, and timestamps
-
-Staff Table: stores staff details and allocation count
-
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
