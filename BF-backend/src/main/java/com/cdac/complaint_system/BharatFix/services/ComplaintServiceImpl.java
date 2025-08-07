@@ -1,27 +1,34 @@
 package com.cdac.complaint_system.BharatFix.services;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.cdac.complaint_system.BharatFix.dto.ComplaintDTO;
 import com.cdac.complaint_system.BharatFix.entites.Complaint;
 import com.cdac.complaint_system.BharatFix.entites.Department;
-import com.cdac.complaint_system.BharatFix.entites.GuestUser;
 import com.cdac.complaint_system.BharatFix.entites.User;
+import com.cdac.complaint_system.BharatFix.entites.GuestUser;
 import com.cdac.complaint_system.BharatFix.exceptions.ResourceNotFoundException;
 import com.cdac.complaint_system.BharatFix.repository.ComplaintRepository;
 import com.cdac.complaint_system.BharatFix.repository.DepartmentRepository;
 import com.cdac.complaint_system.BharatFix.repository.UserRepository;
 
-import java.util.List;
-
 @Service
 public class ComplaintServiceImpl implements ComplaintService {
 
+	@Autowired
     private final ComplaintRepository complaintRepository;
-    private final UserRepository userRepository;
+    @Autowired
+	private final UserRepository userRepository;
+    @Autowired
     private final GuestUserRepository guestUserRepository;
+    @Autowired
     private final DepartmentRepository departmentRepository;
-
+    
     public ComplaintServiceImpl(ComplaintRepository complaintRepository,
                                 UserRepository userRepository,
                                 GuestUserRepository guestUserRepository,
@@ -30,6 +37,17 @@ public class ComplaintServiceImpl implements ComplaintService {
         this.userRepository = userRepository;
         this.guestUserRepository = guestUserRepository;
         this.departmentRepository = departmentRepository;
+    }
+    
+    public String getProtectedResource() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            org.springframework.security.core.userdetails.User userDetails = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+            return username;
+        } else {
+            return "";
+        }
     }
 
     @Override
@@ -45,24 +63,20 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found"));
         complaint.setDepartment(department);
 
-        if (dto.getUserId() != null) {
-            User user = userRepository.findById(dto.getUserId())
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-            complaint.setUser(user);
-        }
+        User user = userRepository.findByUsername(getProtectedResource())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        complaint.setUser(user);
 
-        if (dto.getGuestUserId() != null) {
-            GuestUser guest = guestUserRepository.findById(dto.getGuestUserId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Guest user not found"));
-            complaint.setGuestUser(guest);
-        }
+        GuestUser guest = guestUserRepository.findByIpAddress(getProtectedResource())
+                .orElseThrow(() -> new ResourceNotFoundException("Guest user not found"));
+        complaint.setGuestUser(guest);
 
         return complaintRepository.save(complaint);
     }
 
     @Override
-    public Complaint getComplaintById(Long id) {
-        return complaintRepository.findById(id)
+    public Complaint getComplaintById(String id) {
+        return complaintRepository.findById(Long.valueOf(id))
                 .orElseThrow(() -> new ResourceNotFoundException("Complaint not found with ID: " + id));
     }
 

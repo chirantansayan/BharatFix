@@ -2,9 +2,15 @@ package com.cdac.complaint_system.BharatFix.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.cdac.complaint_system.BharatFix.dto.ComplaintDTO;
 import com.cdac.complaint_system.BharatFix.entites.Complaint;
@@ -14,11 +20,12 @@ import com.cdac.complaint_system.BharatFix.services.ComplaintService;
 @RequestMapping("/api/complaints")
 public class ComplaintController {
 
-    private final ComplaintService complaintService;
+	@Autowired
+    private ComplaintService complaintService;
 
-    public ComplaintController(ComplaintService complaintService) {
-        this.complaintService = complaintService;
-    }
+//    public ComplaintController(ComplaintService complaintService) {
+//        this.complaintService = complaintService;
+//    }
 
     // Authenticated users can file complaints
 //    @PreAuthorize("hasRole('USER')")
@@ -31,13 +38,13 @@ public class ComplaintController {
     // Admins and users can view individual complaints
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<Complaint> getComplaint(@PathVariable Long id) {
+    public ResponseEntity<Complaint> getComplaint(@PathVariable String id) {
         Complaint complaint = complaintService.getComplaintById(id);
         return ResponseEntity.ok(complaint);
     }
 
     // Only admins can view all complaints
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/allcomplaints")
     public ResponseEntity<List<Complaint>> getAllComplaints() {
         return ResponseEntity.ok(complaintService.getAllComplaints());

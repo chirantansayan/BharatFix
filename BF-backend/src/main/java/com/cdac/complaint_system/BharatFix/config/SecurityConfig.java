@@ -45,7 +45,7 @@ public class SecurityConfig {
                     "/api/auth/**",
                     "/api/users/register", // This path is now correctly handled
                     "/api/guest/register",
-                    "/api/complaints"
+                    "/api/complaints/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

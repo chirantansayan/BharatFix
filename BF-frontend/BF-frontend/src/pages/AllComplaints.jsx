@@ -10,7 +10,7 @@ const AllComplaints = () => {
     const fetchComplaints = async () => {
       try {
         // Endpoint matches backend ComplaintController
-        const res = await axios.get('/api/complaints/all');
+        const res = await axios.get('/api/complaints/allcomplaints');
         setComplaints(res.data);
       } catch (err) {
         console.error('Failed to fetch complaints', err);

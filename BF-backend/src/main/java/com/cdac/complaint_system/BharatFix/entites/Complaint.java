@@ -22,6 +22,7 @@ public class Complaint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comp_id")
     private Long id;
 
     @ManyToOne

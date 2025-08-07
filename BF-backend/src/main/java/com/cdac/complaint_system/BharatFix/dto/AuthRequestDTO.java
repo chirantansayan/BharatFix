@@ -1,6 +1,5 @@
 package com.cdac.complaint_system.BharatFix.dto;
 
-
 public class AuthRequestDTO {
     private String username;
     private String password;
