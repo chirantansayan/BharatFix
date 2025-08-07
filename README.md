@@ -46,12 +46,12 @@
 - JWT-based authentication
 - Role-based authorization
 - Password encryption using BCrypt
-- OTP verification for guest users
+- OTP verification for guest users (future aspect)
 
 ## Project Modules
 
 - User registration and login
-- OTP-based guest complaint submission
+- Guest complaint submission
 - Complaint creation, tracking, and management
 - Admin dashboard for complaint allocation and user/department management
 - Department staff dashboard for resolution uploads
