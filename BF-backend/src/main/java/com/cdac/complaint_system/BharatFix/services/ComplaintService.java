@@ -7,7 +7,8 @@ import com.cdac.complaint_system.BharatFix.entites.Complaint;
 
 public interface ComplaintService {
     Complaint createComplaint(ComplaintDTO dto);
-    Complaint getComplaintById(String id);
+    List<Complaint> getComplaintsByUid(Long id);
     List<Complaint> getAllComplaints();
+    String getProtectedResource();
 }
 

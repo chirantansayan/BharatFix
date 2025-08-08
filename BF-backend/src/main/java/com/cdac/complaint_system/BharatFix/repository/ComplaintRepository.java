@@ -10,6 +10,5 @@ import com.cdac.complaint_system.BharatFix.entites.Complaint;
 @Repository
 public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
 	List<Complaint> findByUserId(Long userId);
-
 }
 

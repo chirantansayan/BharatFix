@@ -11,7 +11,7 @@ import com.cdac.complaint_system.BharatFix.dto.ComplaintDTO;
 import com.cdac.complaint_system.BharatFix.entites.Complaint;
 import com.cdac.complaint_system.BharatFix.entites.Department;
 import com.cdac.complaint_system.BharatFix.entites.User;
-import com.cdac.complaint_system.BharatFix.entites.GuestUser;
+//import com.cdac.complaint_system.BharatFix.entites.GuestUser;
 import com.cdac.complaint_system.BharatFix.exceptions.ResourceNotFoundException;
 import com.cdac.complaint_system.BharatFix.repository.ComplaintRepository;
 import com.cdac.complaint_system.BharatFix.repository.DepartmentRepository;
@@ -24,8 +24,8 @@ public class ComplaintServiceImpl implements ComplaintService {
     private final ComplaintRepository complaintRepository;
     @Autowired
 	private final UserRepository userRepository;
-    @Autowired
-    private final GuestUserRepository guestUserRepository;
+//    @Autowired
+//    private final GuestUserRepository guestUserRepository;
     @Autowired
     private final DepartmentRepository departmentRepository;
     
@@ -35,10 +35,11 @@ public class ComplaintServiceImpl implements ComplaintService {
                                 DepartmentRepository departmentRepository) {
         this.complaintRepository = complaintRepository;
         this.userRepository = userRepository;
-        this.guestUserRepository = guestUserRepository;
+//        this.guestUserRepository = guestUserRepository;
         this.departmentRepository = departmentRepository;
     }
     
+    @Override
     public String getProtectedResource() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
@@ -67,17 +68,17 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         complaint.setUser(user);
 
-        GuestUser guest = guestUserRepository.findByIpAddress(getProtectedResource())
-                .orElseThrow(() -> new ResourceNotFoundException("Guest user not found"));
-        complaint.setGuestUser(guest);
+//        GuestUser guest = guestUserRepository.findByIpAddress(getProtectedResource())
+//                .orElseThrow(() -> new ResourceNotFoundException("Guest user not found"));
+//        complaint.setGuestUser(guest);
 
         return complaintRepository.save(complaint);
     }
 
     @Override
-    public Complaint getComplaintById(String id) {
-        return complaintRepository.findById(Long.valueOf(id))
-                .orElseThrow(() -> new ResourceNotFoundException("Complaint not found with ID: " + id));
+    public List<Complaint> getComplaintsByUid(Long id) {
+        return complaintRepository.findByUserId(id);
+//                .orElseThrow(() -> new ResourceNotFoundException("Complaint not found with ID: " + id));
     }
 
     @Override
