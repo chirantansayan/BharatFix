@@ -82,7 +82,7 @@ const ComplaintForm = () => {
     };
 
     try {
-      await axios.post('/api/complaints', complaintData, {
+      await axios.post('/api/complaints/send', complaintData, {
         headers: { 'Content-Type': 'application/json' },
       });
 

@@ -10,7 +10,7 @@ const MyComplaints = () => {
     const fetchMyComplaints = async () => {
       try {
         // Endpoint matches backend ComplaintController
-        const res = await axios.get('/api/complaints/allcomplaints');
+        const res = await axios.get('/api/complaints/fetch');
         setComplaints(res.data);
       } catch (err) {
         console.error('Error fetching complaints:', err);
@@ -35,7 +35,7 @@ const MyComplaints = () => {
               </p>
               <p>{c.description}</p>
               <p>
-                <strong>Department:</strong> {c.department}
+                <strong>Department:</strong> {c.department_id}
               </p>
               <p>
                 <strong>Submitted:</strong> {new Date(c.createdAt).toLocaleString()}

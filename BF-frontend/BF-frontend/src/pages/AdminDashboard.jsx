@@ -23,7 +23,7 @@ const AdminDashboard = () => {
             <h2>View All Complaints</h2>
             <p>Manage and assign complaints.</p>
             {/* Corrected route */}
-            <button onClick={() => navigate('/api/complaints/allcomplaints')}>Manage</button>
+            <button onClick={() => navigate('/admin/all-complaints')}>Manage</button>
           </div>
 
           <div className="card card-blue">
@@ -32,7 +32,7 @@ const AdminDashboard = () => {
               View or edit registered <br /> users.
             </p>
             {/* Placeholder for future functionality */}
-            <button onClick={() => navigate('/api/users/all')}>Users</button>
+            <button onClick={() => navigate('/users/all')}>Users</button>
           </div>
 
           <div className="card card-green">
