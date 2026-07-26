@@ -33,6 +33,12 @@ export default function Navbar() {
               >
                 Register
               </Link>
+              <Link
+                href="/contact"
+                className="border border-ink px-5 py-2 tracking-[0.12em] text-ink transition hover:bg-ink hover:text-paper"
+              >
+                Our Team
+              </Link>
             </>
           )}
 
