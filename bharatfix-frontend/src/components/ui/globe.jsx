@@ -1,109 +1,84 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import createGlobe from "cobe";
-import { cn } from "@/lib/utils";
+import { useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
-export const GLOBE_CONFIG = {
-  width: 800,
-  height: 800,
-  onRender: () => {},
-  devicePixelRatio: 2,
-  phi: 0,
-  theta: 0.3,
-  dark: 0,
-  diffuse: 0.4,
-  mapSamples: 16000,
-  mapBrightness: 1.2,
-  baseColor: [1, 1, 1],
-  markerColor: [0.71, 0.42, 0.09],
-  glowColor: [1, 1, 1],
-  markers: [
-    { location: [28.6139, 77.209], size: 0.06 }, // Delhi
-    { location: [19.076, 72.8777], size: 0.06 }, // Mumbai
-    { location: [22.5726, 88.3639], size: 0.05 }, // Kolkata
-    { location: [13.0827, 80.2707], size: 0.05 }, // Chennai
-    { location: [12.9716, 77.5946], size: 0.05 }, // Bengaluru
-    { location: [25.5941, 85.1376], size: 0.06 }, // Patna
-    { location: [23.0225, 72.5714], size: 0.04 }, // Ahmedabad
-    { location: [26.9124, 75.7873], size: 0.04 }, // Jaipur
-  ],
-};
-
-export function Globe({ className, config = GLOBE_CONFIG }) {
-  let phi = 0;
-  let width = 0;
-  const canvasRef = useRef(null);
-  const pointerInteracting = useRef(null);
-  const pointerInteractionMovement = useRef(0);
-  const [r, setR] = useState(0);
-
-  const updatePointerInteraction = (value) => {
-    pointerInteracting.current = value;
-    if (canvasRef.current) {
-      canvasRef.current.style.cursor = value ? "grabbing" : "grab";
-    }
-  };
-
-  const updateMovement = (clientX) => {
-    if (pointerInteracting.current !== null) {
-      const delta = clientX - pointerInteracting.current;
-      pointerInteractionMovement.current = delta;
-      setR(delta / 200);
-    }
-  };
-
-  const onRender = useCallback(
-    (state) => {
-      if (!pointerInteracting.current) phi += 0.004;
-      state.phi = phi + r;
-      state.width = width * 2;
-      state.height = width * 2;
-    },
-    [r]
-  );
-
-  const onResize = () => {
-    if (canvasRef.current) {
-      width = canvasRef.current.offsetWidth;
-    }
-  };
-
+// Fix leaflet's broken default icon paths in Next.js
+function FixLeafletIcons() {
+  const map = useMap();
   useEffect(() => {
-    window.addEventListener("resize", onResize);
-    onResize();
-
-    const globe = createGlobe(canvasRef.current, {
-      ...config,
-      width: width * 2,
-      height: width * 2,
-      onRender,
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const L = require("leaflet");
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+      iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+      shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
     });
+  }, [map]);
+  return null;
+}
 
-    setTimeout(() => {
-      if (canvasRef.current) canvasRef.current.style.opacity = "1";
-    }, 0);
+const COMPLAINT_CITIES = [
+  { city: "Delhi", lat: 28.6139, lng: 77.209, complaints: 1284, resolved: 1102 },
+  { city: "Mumbai", lat: 19.076, lng: 72.8777, complaints: 987, resolved: 834 },
+  { city: "Kolkata", lat: 22.5726, lng: 88.3639, complaints: 643, resolved: 521 },
+  { city: "Chennai", lat: 13.0827, lng: 80.2707, complaints: 721, resolved: 618 },
+  { city: "Bengaluru", lat: 12.9716, lng: 77.5946, complaints: 893, resolved: 774 },
+  { city: "Patna", lat: 25.5941, lng: 85.1376, complaints: 412, resolved: 318 },
+  { city: "Ahmedabad", lat: 23.0225, lng: 72.5714, complaints: 534, resolved: 461 },
+  { city: "Jaipur", lat: 26.9124, lng: 75.7873, complaints: 389, resolved: 302 },
+  { city: "Hyderabad", lat: 17.385, lng: 78.4867, complaints: 678, resolved: 589 },
+  { city: "Pune", lat: 18.5204, lng: 73.8567, complaints: 512, resolved: 443 },
+  { city: "Lucknow", lat: 26.8467, lng: 80.9462, complaints: 334, resolved: 271 },
+  { city: "Bhopal", lat: 23.2599, lng: 77.4126, complaints: 278, resolved: 221 },
+];
 
-    return () => {
-      globe.destroy();
-      window.removeEventListener("resize", onResize);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+export function Globe({ className }) {
   return (
-    <div className={cn("mx-auto aspect-square w-full max-w-[560px]", className)}>
-      <canvas
-        ref={canvasRef}
-        className="size-full opacity-0 transition-opacity duration-700 [contain:layout_paint_size]"
-        onPointerDown={(e) =>
-          updatePointerInteraction(e.clientX - pointerInteractionMovement.current)
-        }
-        onPointerUp={() => updatePointerInteraction(null)}
-        onPointerOut={() => updatePointerInteraction(null)}
-        onMouseMove={(e) => updateMovement(e.clientX)}
-        onTouchMove={(e) => e.touches[0] && updateMovement(e.touches[0].clientX)}
-      />
+    <div className={`relative h-[500px] w-full overflow-hidden rounded-sm border border-white/10 ${className ?? ""}`}>
+      <MapContainer
+        center={[22.5, 82.5]}
+        zoom={5}
+        minZoom={4}
+        maxZoom={8}
+        scrollWheelZoom={false}
+        style={{ height: "100%", width: "100%", background: "#14181C" }}
+        zoomControl={false}
+      >
+        <FixLeafletIcons />
+
+        {/* Dark tile layer — CartoDB Dark Matter */}
+        <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+        />
+
+        {COMPLAINT_CITIES.map((c) => (
+          <Marker key={c.city} position={[c.lat, c.lng]}>
+            <Popup className="bf-popup">
+              <div style={{ fontFamily: "IBM Plex Mono, monospace", fontSize: 11, lineHeight: 1.6 }}>
+                <p style={{ color: "#A0721F", marginBottom: 2, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                  {c.city}
+                </p>
+                <p style={{ color: "#52626F" }}>Filed: <strong style={{ color: "#1C2B39" }}>{c.complaints}</strong></p>
+                <p style={{ color: "#52626F" }}>Resolved: <strong style={{ color: "#2F6E51" }}>{c.resolved}</strong></p>
+                <p style={{ color: "#52626F" }}>
+                  Rate: <strong style={{ color: "#1C2B39" }}>
+                    {Math.round((c.resolved / c.complaints) * 100)}%
+                  </strong>
+                </p>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+
+      {/* Overlay label */}
+      <p className="pointer-events-none absolute bottom-3 inset-x-0 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-white/40 z-[1000]">
+        Every ward, one registry
+      </p>
     </div>
   );
 }

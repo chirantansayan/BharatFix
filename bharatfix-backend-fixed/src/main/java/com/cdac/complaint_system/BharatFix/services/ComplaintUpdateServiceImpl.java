@@ -40,6 +40,9 @@ public class ComplaintUpdateServiceImpl implements ComplaintUpdateService {
         update.setStatus(dto.getStatus());
         update.setMessage(dto.getMessage());
         update.setUpdatedAt(LocalDateTime.now());
+        
+        complaint.setStatus(dto.getStatus());
+        complaintRepository.save(complaint);
 
         return updateRepository.save(update);
     }

@@ -2,7 +2,9 @@ package com.cdac.complaint_system.BharatFix.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.cdac.complaint_system.BharatFix.repository.UserRepository;
 import com.cdac.complaint_system.BharatFix.dto.FeedbackDTO;
 import com.cdac.complaint_system.BharatFix.entites.Complaint;
 import com.cdac.complaint_system.BharatFix.entites.Feedback;
@@ -33,7 +35,10 @@ public class FeedbackServiceImpl implements FeedbackService {
         Complaint complaint = complaintRepository.findById(dto.getComplaintId())
                 .orElseThrow(() -> new ResourceNotFoundException("Complaint not found"));
 
-        User user = userRepository.findById(dto.getUserId())
+ 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Feedback feedback = new Feedback();

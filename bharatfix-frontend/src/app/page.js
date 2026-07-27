@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { Globe } from "@/components/ui/globe";
+import IndiaMap from "@/components/ui/india-map-wrapper";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { HoverEffect } from "@/components/ui/card-hover-effect";
 import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
@@ -120,7 +120,7 @@ export default function LandingPage() {
 
               {/* Globe — a registry that spans every ward */}
               <div className="relative hidden md:block">
-                <Globe />
+                <IndiaMap/>
                 <p className="pointer-events-none absolute inset-x-0 bottom-2 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
                   Every ward, one registry
                 </p>

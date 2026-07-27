@@ -12,6 +12,8 @@ import com.cdac.complaint_system.BharatFix.entites.Complaint;
 import com.cdac.complaint_system.BharatFix.entites.ComplaintAllocation;
 import com.cdac.complaint_system.BharatFix.entites.Team;
 import com.cdac.complaint_system.BharatFix.entites.User;
+import com.cdac.complaint_system.BharatFix.enums.AllocationStatus;
+import com.cdac.complaint_system.BharatFix.enums.ComplaintStatus;
 import com.cdac.complaint_system.BharatFix.exceptions.ResourceNotFoundException;
 import com.cdac.complaint_system.BharatFix.repository.ComplaintAllocationRepository;
 import com.cdac.complaint_system.BharatFix.repository.ComplaintRepository;
@@ -50,6 +52,13 @@ public class ComplaintAllocationServiceImpl implements ComplaintAllocationServic
         allocation.setAssignedBy(admin);
         allocation.setStatus(dto.getStatus());
         allocation.setAssignedAt(LocalDateTime.now());
+        
+        if (dto.getStatus() == AllocationStatus.ASSIGNED) {
+            team.setAvailable(false);
+            teamRepository.save(team);
+            complaint.setStatus(ComplaintStatus.ONGOING);
+            complaintRepository.save(complaint);
+        }
 
         return allocationRepository.save(allocation);
     }
