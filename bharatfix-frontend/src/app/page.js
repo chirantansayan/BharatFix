@@ -131,7 +131,7 @@ export default function LandingPage() {
 
         {/* Big wordmark — text hover effect */}
         <section className="border-b border-line bg-near-black">
-          <div className="mx-auto flex h-[220px] max-w-6xl items-center justify-center px-6 sm:h-[280px]">
+          <div className="mx-auto flex h-[220px] max-w-3xl items-center justify-center px-6 sm:h-[280px]">
             <TextHoverEffect text="BHARATFIX" duration={1} />
           </div>
         </section>
