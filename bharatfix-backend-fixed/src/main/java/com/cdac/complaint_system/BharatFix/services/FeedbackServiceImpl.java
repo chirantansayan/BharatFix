@@ -12,8 +12,6 @@ import com.cdac.complaint_system.BharatFix.entites.User;
 import com.cdac.complaint_system.BharatFix.exceptions.ResourceNotFoundException;
 import com.cdac.complaint_system.BharatFix.repository.ComplaintRepository;
 import com.cdac.complaint_system.BharatFix.repository.FeedbackRepository;
-import com.cdac.complaint_system.BharatFix.repository.UserRepository;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
