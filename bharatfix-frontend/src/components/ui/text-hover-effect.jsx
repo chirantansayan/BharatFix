@@ -32,10 +32,10 @@ export function TextHoverEffect({ text, duration }) {
     >
       <defs>
         <linearGradient id="bf-text-gradient" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#C99A47" />
-          <stop offset="35%" stopColor="#B0431C" />
-          <stop offset="65%" stopColor="#2F6E51" />
-          <stop offset="100%" stopColor="#A0721F" />
+          <stop offset="0%" stopColor="var(--brass-soft)" />
+          <stop offset="35%" stopColor="var(--pending)" />
+          <stop offset="65%" stopColor="var(--resolved)" />
+          <stop offset="100%" stopColor="var(--brass)" />
         </linearGradient>
 
         <motion.radialGradient
@@ -62,7 +62,7 @@ export function TextHoverEffect({ text, duration }) {
         dominantBaseline="middle"
         strokeWidth="0.4"
         className="fill-transparent font-display text-6xl font-bold"
-        style={{ stroke: "#3A4652", opacity: hovered ? 0.55 : 0.28 }}
+        style={{ stroke: "var(--line-strong)", opacity: hovered ? 0.55 : 0.28 }}
       >
         {text}
       </text>
@@ -74,7 +74,7 @@ export function TextHoverEffect({ text, duration }) {
         textAnchor="middle"
         dominantBaseline="middle"
         strokeWidth="0.4"
-        stroke="#C99A47"
+        stroke="var(--brass-soft)"
         className="fill-transparent font-display text-6xl font-bold"
         initial={{ strokeDashoffset: 1000, strokeDasharray: 1000 }}
         animate={{ strokeDashoffset: 0 }}

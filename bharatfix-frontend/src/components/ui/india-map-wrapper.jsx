@@ -7,7 +7,7 @@ const IndiaMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-[500px] w-full rounded-sm border border-white/10 bg-near-black animate-pulse" />
+      <div className="map-frame h-[500px] w-full animate-pulse rounded-3xl bg-near-black p-px" />
     ),
   }
 );

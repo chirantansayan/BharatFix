@@ -121,7 +121,7 @@ export default function LandingPage() {
               {/* Globe — a registry that spans every ward */}
               <div className="relative hidden md:block">
                 <IndiaMap/>
-                <p className="pointer-events-none absolute inset-x-0 bottom-2 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
+                <p className="pointer-events-none absolute inset-x-0 bottom-2 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-ink-soft">
                   Every ward, one registry
                 </p>
               </div>

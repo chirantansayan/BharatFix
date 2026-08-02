@@ -1,13 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { Moon, Sun } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="border-b border-line bg-paper-raised">
+    <header className="sticky top-4 z-50 mx-4 rounded-2xl border border-line bg-paper-raised/90 shadow-lg shadow-ink/10 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-sm border border-ink bg-ink font-mono text-sm font-semibold text-paper">
@@ -19,6 +22,14 @@ export default function Navbar() {
         </Link>
 
         <nav className="flex items-center gap-7 text-xs font-medium uppercase tracking-[0.12em]">
+          <button
+            onClick={toggleTheme}
+            className="rounded-full border border-line-strong p-2 text-ink-soft transition hover:border-ink hover:text-ink"
+            aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+            title={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+          >
+            {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
+          </button>
           {!user && (
             <>
               <Link href="/#how-it-works" className="hidden text-ink-soft hover:text-ink sm:inline">

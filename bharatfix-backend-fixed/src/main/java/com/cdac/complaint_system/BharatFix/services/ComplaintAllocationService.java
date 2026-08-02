@@ -3,10 +3,9 @@ package com.cdac.complaint_system.BharatFix.services;
 import java.util.List;
 
 import com.cdac.complaint_system.BharatFix.dto.ComplaintAllocationDTO;
-import com.cdac.complaint_system.BharatFix.entites.ComplaintAllocation;
+import com.cdac.complaint_system.BharatFix.dto.ComplaintAllocationResponseDTO;
 
 public interface ComplaintAllocationService {
-    ComplaintAllocation allocateTeam(ComplaintAllocationDTO dto);
-    List<ComplaintAllocation> getAllocationsForComplaint(Long complaintId);
+    ComplaintAllocationResponseDTO allocateTeam(ComplaintAllocationDTO dto, String adminUsername);
+    List<ComplaintAllocationResponseDTO> getAllocationsForComplaint(Long complaintId);
 }
-

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { useTheme } from "@/context/ThemeContext";
 
 // Fix leaflet's broken default icon paths in Next.js
 function FixLeafletIcons() {
@@ -36,22 +37,23 @@ const COMPLAINT_CITIES = [
 ];
 
 export function Globe({ className }) {
+  const { theme } = useTheme();
+
   return (
-    <div className={`relative h-[500px] w-full overflow-hidden rounded-sm border border-white/10 ${className ?? ""}`}>
+    <div className={`map-frame relative h-[500px] w-full overflow-hidden rounded-3xl p-px ${className ?? ""}`}>
       <MapContainer
         center={[22.5, 82.5]}
         zoom={5}
         minZoom={4}
         maxZoom={8}
         scrollWheelZoom={false}
-        style={{ height: "100%", width: "100%", background: "#14181C" }}
+        style={{ height: "100%", width: "100%", background: "var(--near-black)" }}
         zoomControl={false}
       >
         <FixLeafletIcons />
 
-        {/* Dark tile layer — CartoDB Dark Matter */}
         <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          url={`https://{s}.basemaps.cartocdn.com/${theme === "dark" ? "dark_all" : "light_all"}/{z}/{x}/{y}{r}.png`}
           attribution='&copy; <a href="https://carto.com/">CARTO</a>'
         />
 
@@ -59,13 +61,13 @@ export function Globe({ className }) {
           <Marker key={c.city} position={[c.lat, c.lng]}>
             <Popup className="bf-popup">
               <div style={{ fontFamily: "IBM Plex Mono, monospace", fontSize: 11, lineHeight: 1.6 }}>
-                <p style={{ color: "#A0721F", marginBottom: 2, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                <p style={{ color: "var(--brass)", marginBottom: 2, textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   {c.city}
                 </p>
-                <p style={{ color: "#52626F" }}>Filed: <strong style={{ color: "#1C2B39" }}>{c.complaints}</strong></p>
-                <p style={{ color: "#52626F" }}>Resolved: <strong style={{ color: "#2F6E51" }}>{c.resolved}</strong></p>
-                <p style={{ color: "#52626F" }}>
-                  Rate: <strong style={{ color: "#1C2B39" }}>
+                <p style={{ color: "var(--ink-soft)" }}>Filed: <strong style={{ color: "var(--ink)" }}>{c.complaints}</strong></p>
+                <p style={{ color: "var(--ink-soft)" }}>Resolved: <strong style={{ color: "var(--resolved)" }}>{c.resolved}</strong></p>
+                <p style={{ color: "var(--ink-soft)" }}>
+                  Rate: <strong style={{ color: "var(--ink)" }}>
                     {Math.round((c.resolved / c.complaints) * 100)}%
                   </strong>
                 </p>
@@ -76,7 +78,7 @@ export function Globe({ className }) {
       </MapContainer>
 
       {/* Overlay label */}
-      <p className="pointer-events-none absolute bottom-3 inset-x-0 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-white/40 z-[1000]">
+      <p className="pointer-events-none absolute bottom-3 inset-x-0 z-[1000] text-center font-mono text-[11px] uppercase tracking-[0.2em] text-ink-soft">
         Every ward, one registry
       </p>
     </div>

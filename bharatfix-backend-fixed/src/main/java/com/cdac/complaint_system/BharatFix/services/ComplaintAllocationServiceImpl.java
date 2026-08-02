@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cdac.complaint_system.BharatFix.dto.ComplaintAllocationDTO;
+import com.cdac.complaint_system.BharatFix.dto.ComplaintAllocationResponseDTO;
 import com.cdac.complaint_system.BharatFix.entites.Complaint;
 import com.cdac.complaint_system.BharatFix.entites.ComplaintAllocation;
 import com.cdac.complaint_system.BharatFix.entites.Team;
@@ -15,6 +17,8 @@ import com.cdac.complaint_system.BharatFix.entites.User;
 import com.cdac.complaint_system.BharatFix.enums.AllocationStatus;
 import com.cdac.complaint_system.BharatFix.enums.ComplaintStatus;
 import com.cdac.complaint_system.BharatFix.exceptions.ResourceNotFoundException;
+import com.cdac.complaint_system.BharatFix.exceptions.BadRequestException;
+import com.cdac.complaint_system.BharatFix.exceptions.TeamUnavailableException;
 import com.cdac.complaint_system.BharatFix.repository.ComplaintAllocationRepository;
 import com.cdac.complaint_system.BharatFix.repository.ComplaintRepository;
 import com.cdac.complaint_system.BharatFix.repository.TeamRepository;
@@ -36,15 +40,28 @@ public class ComplaintAllocationServiceImpl implements ComplaintAllocationServic
     private UserRepository userRepository;
 
     @Override
-    public ComplaintAllocation allocateTeam(ComplaintAllocationDTO dto) {
+    @Transactional
+    public ComplaintAllocationResponseDTO allocateTeam(ComplaintAllocationDTO dto, String adminUsername) {
+        if (dto.getComplaintId() == null || dto.getTeamId() == null || dto.getStatus() == null) {
+            throw new BadRequestException("Complaint, team and allocation status are required");
+        }
+
         Complaint complaint = complaintRepository.findById(dto.getComplaintId())
                 .orElseThrow(() -> new ResourceNotFoundException("Complaint not found"));
 
         Team team = teamRepository.findById(dto.getTeamId())
                 .orElseThrow(() -> new ResourceNotFoundException("Team not found"));
 
-        User admin = userRepository.findById(dto.getAssignedBy())
+        User admin = userRepository.findByUsername(adminUsername)
                 .orElseThrow(() -> new ResourceNotFoundException("Admin not found"));
+
+        if (complaint.getDepartment() == null || !complaint.getDepartment().getId().equals(team.getDepartment().getId())) {
+            throw new BadRequestException("The selected team must belong to the complaint's department");
+        }
+
+        if (dto.getStatus() == AllocationStatus.ASSIGNED && !team.isAvailable()) {
+            throw new TeamUnavailableException("This team is no longer available for allocation");
+        }
 
         ComplaintAllocation allocation = new ComplaintAllocation();
         allocation.setComplaint(complaint);
@@ -60,12 +77,24 @@ public class ComplaintAllocationServiceImpl implements ComplaintAllocationServic
             complaintRepository.save(complaint);
         }
 
-        return allocationRepository.save(allocation);
+        return toResponse(allocationRepository.save(allocation));
     }
 
     @Override
-    public List<ComplaintAllocation> getAllocationsForComplaint(Long complaintId) {
-        return allocationRepository.findByComplaintId(complaintId);
+    @Transactional(readOnly = true)
+    public List<ComplaintAllocationResponseDTO> getAllocationsForComplaint(Long complaintId) {
+        return allocationRepository.findByComplaintId(complaintId).stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    private ComplaintAllocationResponseDTO toResponse(ComplaintAllocation allocation) {
+        return new ComplaintAllocationResponseDTO(
+                allocation.getId(),
+                allocation.getComplaint().getId(),
+                allocation.getTeam().getId(),
+                allocation.getTeam().getTeamName(),
+                allocation.getStatus(),
+                allocation.getAssignedAt());
     }
 }
-

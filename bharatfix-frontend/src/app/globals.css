@@ -17,6 +17,22 @@
   --line-strong: #C7BA9C;
 }
 
+html[data-theme="dark"] {
+  --paper: #0b1220;
+  --paper-raised: #121d2d;
+  --ink: #e7edf6;
+  --ink-soft: #a9b6c8;
+  --brass: #f2bb55;
+  --brass-soft: #f6d38c;
+  --navy: #e7edf6;
+  --near-black: #060b14;
+  --resolved: #65d59d;
+  --ongoing: #f6c85f;
+  --pending: #fb8f80;
+  --line: #26364b;
+  --line-strong: #3b4d66;
+}
+
 body {
   background-color: var(--paper);
   color: var(--ink);
@@ -86,6 +102,23 @@ body {
     radial-gradient(ellipse 70% 50% at 100% 100%, rgba(160,114,31,0.10), transparent 55%),
     linear-gradient(160deg, #1B2027 0%, var(--near-black) 55%, #0F1216 100%);
 }
+
+html[data-theme="light"] .hero-field {
+  color: var(--ink);
+  background:
+    radial-gradient(ellipse 80% 65% at 10% 0%, rgba(201, 154, 71, 0.24), transparent 60%),
+    radial-gradient(ellipse 70% 60% at 100% 100%, rgba(47, 110, 81, 0.13), transparent 55%),
+    linear-gradient(160deg, #fdfbf6 0%, var(--paper) 55%, #ebe4d3 100%);
+}
+
+html[data-theme="light"] .hero-field .text-white { color: var(--ink); }
+html[data-theme="light"] .hero-field .text-white\/50,
+html[data-theme="light"] .hero-field .text-white\/65,
+html[data-theme="light"] .hero-field .text-white\/70,
+html[data-theme="light"] .hero-field .text-white\/40 { color: var(--ink-soft); }
+html[data-theme="light"] .hero-field .border-white { border-color: var(--ink); }
+html[data-theme="light"] .hero-field .hover\:bg-black:hover { background-color: var(--ink); }
+html[data-theme="light"] .hero-field .hover\:text-white:hover { color: var(--paper); }
 .hero-field::before {
   content: "";
   position: absolute;
@@ -95,14 +128,54 @@ body {
   pointer-events: none;
 }
 
+/* Admin command center light-mode overrides. */
+.dashboard-light {
+  background: #f4f7fb;
+  color: #0f172a;
+}
+
+.dashboard-light .dashboard-sidebar,
+.dashboard-light .dashboard-header {
+  border-color: #dbe3ee;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.dashboard-light .dashboard-card {
+  border-color: #dbe3ee;
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+}
+
+.dashboard-light main .text-white { color: #0f172a; }
+.dashboard-light main .text-slate-400 { color: #64748b; }
+.dashboard-light main .text-slate-300 { color: #475569; }
+.dashboard-light main [class*="bg-white/"] { background-color: #f1f5f9; }
+.dashboard-light main [class*="border-white/"] { border-color: #dbe3ee; }
+.dashboard-light .dashboard-header [class*="bg-white/"] { background-color: #f1f5f9; }
+.dashboard-light .dashboard-header [class*="border-white/"] { border-color: #dbe3ee; }
+.dashboard-light .dashboard-sidebar .text-slate-400 { color: #64748b; }
+.dashboard-light .dashboard-sidebar .border-white\/10 { border-color: #dbe3ee; }
+.dashboard-light .dashboard-sidebar .hover\:bg-white\/5:hover,
+.dashboard-light .dashboard-header .hover\:bg-white\/10:hover { background-color: #e8f1ff; }
+
 
 /* Leaflet popup override to match BharatFix palette */
 .leaflet-popup-content-wrapper {
   border-radius: 2px !important;
-  border: 1px solid #DCD3BE !important;
-  background: #FBF8F1 !important;
+  border: 1px solid var(--line) !important;
+  background: var(--paper-raised) !important;
   box-shadow: 0 2px 12px rgba(0,0,0,0.15) !important;
 }
 .leaflet-popup-tip {
-  background: #FBF8F1 !important;
+  background: var(--paper-raised) !important;
+}
+
+.map-frame {
+  background: linear-gradient(135deg, var(--brass-soft), var(--line-strong) 42%, var(--resolved));
+  box-shadow: 0 20px 45px color-mix(in srgb, var(--ink) 22%, transparent);
+}
+
+.map-frame .leaflet-container {
+  height: 100%;
+  border-radius: calc(1.5rem - 1px);
 }
