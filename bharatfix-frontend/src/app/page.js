@@ -89,7 +89,7 @@ export default function LandingPage() {
                 </p>
                 <h1 className="mt-5 font-display text-5xl font-medium italic leading-[1.08] tracking-tight text-white sm:text-6xl">
                   Every civic issue,
-                  <br /> filed, tracked, and
+                  <br /> filed, tracked and
                   <br /> closed in the open.
                 </h1>
                 <p className="mt-6 max-w-md text-base leading-relaxed text-white/65">
