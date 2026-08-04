@@ -1,4 +1,4 @@
-# BharatFix - Municipal Complaint Management System
+# BharatFix - Municipal Complaint Management System.
 
 **BharatFix** is a full-stack web application designed to streamline the complaint resolution process between citizens and municipalities. It allows users to register and report civic issues, enables municipal departments to manage and resolve those issues, and provides administrators with tools for oversight and coordination.
 ## Deployed Project
