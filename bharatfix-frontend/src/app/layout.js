@@ -3,7 +3,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 
 export const metadata = {
-  title: "BharatFix — Civic Complaint Registry",
+  title: "BharatFix",
   description:
     "File, track, and resolve municipal civic issues. BharatFix connects citizens, departments, and administrators on one registry.",
 };
